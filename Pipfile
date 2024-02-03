@@ -1,0 +1,35 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+"discord.py" = {extras = ["voice"], version = "*"}
+charset-normalizer = "*"
+cryptography = "*"
+pyyaml = "*"
+aiohttp-client-cache = "*"
+orjson = "*"
+reactionmenu = "*"
+sqids = "*"
+mcstatus = "*"
+aiohttp = "*"
+discord-ext-help = "*"
+pillow = "*"
+numpy = "*"
+jishaku = "*"
+motor = "*"
+aiosqlite = "*"
+captcha = "*"
+ulid = "*"
+
+[dev-packages]
+ruff = "*"
+
+[requires]
+python_version = "3.12"
+
+[scripts]
+start = "python main.py"
+init = "python script.py initdb"
+code = "code ."

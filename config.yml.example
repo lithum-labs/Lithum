@@ -1,0 +1,24 @@
+blocked_server: []
+token: 
+token_debug:
+debug: false
+guilds: []
+
+admin_guild: 
+  id: 
+  error_channel: 
+
+bot:
+  prefix: "/sln "
+  prefix_debug: "/sln_dev "
+  admin_guild: 
+  id: 
+  error_channel: 
+
+ffmpeg: ./bin/ffmpeg
+
+database:
+  address: localhost
+  port: 27017
+  user: example-bot-user
+  password: example-bot-pass

@@ -1,0 +1,3 @@
+[submodule "src/lib/Artifacter"]
+	path = src/lib/Artifacter
+	url = https://github.com/selene-discord-dev/ArtifacterImageGen.git
