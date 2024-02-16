@@ -8,7 +8,7 @@ import yaml
 cd = 2
 
 
-class auth(commands.GroupCog, name="cmdname"):
+class className(commands.GroupCog, name="cmdname"):
     def __init__(self, bot):
         self.bot = bot
 
@@ -32,9 +32,9 @@ async def setup(bot: commands.Bot):
     with open("./config.yml", "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
         if config["guild"] == []:
-            await bot.add_cog(auth(bot))
+            await bot.add_cog(className(bot))
         elif config["guild"] is not None:
             guild = []
             for i in config["guild"]:
                 guild.append(discord.Object(i))
-            await bot.add_cog(auth(bot), guilds=guild)
+            await bot.add_cog(className(bot), guilds=guild)

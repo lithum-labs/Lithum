@@ -160,7 +160,7 @@ cython_debug/
 #.idea/
 
 
-# Selene confidential information
+# Lithum confidential information
 data/
 *.json
 *.sqlite

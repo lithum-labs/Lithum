@@ -8,7 +8,7 @@ from discord.ext import commands
 import orjson as json
 import yaml
 
-from .lib.mongo import MongoDB
+from ..lib.mongo import MongoDB
 
 cd = 2
 
@@ -133,17 +133,16 @@ class GlobalChat(commands.Cog):
             return
         if message.author.id in self.admin:
             stat = " (管理者)"
-        with open("data/global.json", "r") as f:
-            gc_guilds = json.loads(f.read())
         try:
+            gc_guilds = self.db.globalchat.find_one({"id": str(message.guild.id)})
             if gc_guilds.get(str(message.guild.id)) is None:
                 return
-            if not gc_guilds[str(message.guild.id)]["ch"] == message.channel.id:
+            if not gc_guilds["ch"] == message.channel.id:
                 return
             await message.add_reaction("🔄")
             if await self.mod_msg(message):
                 return
-            for i in gc_guilds:
+            for i in self.db.globalchat.find():
                 if i["id"] == str(message.guild.id):
                     pass
                 else:
@@ -219,8 +218,8 @@ class GlobalChat(commands.Cog):
                 "グローバルチャットに接続しました。", ephemeral=True
             )
         else:
-            url = gc_guilds[str(interaction.guild.id)]["url"]
-            channel = self.bot.get_channel(gc_guilds[str(interaction.guild.id)]["ch"])
+            url = gc_guilds["url"]
+            channel = self.bot.get_channel(gc_guilds["ch"])
             channel_webhooks = await channel.webhooks()
             for webhook in channel_webhooks:
                 if webhook.url == url:

@@ -21,7 +21,7 @@ class About(commands.GroupCog, name="about"):
 
     @app_commands.command(
         name="follow",
-        description="Follow Selene's announcements channel.",
+        description="Follow Lithum's announcements channel.",
     )
     @app_commands.guild_only()
     @app_commands.checks.cooldown(1, 60)
@@ -37,13 +37,13 @@ class About(commands.GroupCog, name="about"):
 
     @app_commands.command(
         name="show",
-        description="About Selene",
+        description="About Lithum",
     )
     @app_commands.checks.cooldown(4, 60)
     async def about(self, interaction: discord.Interaction):
         await interaction.response.defer()
 
-        title = getText("About Selene")
+        title = getText("About Lithum")
 
         menu = ViewMenu(interaction, menu_type=ViewMenu.TypeEmbed)
 
