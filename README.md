@@ -1,11 +1,8 @@
-# Selene
+# Lithum (旧称: Selene)
 > [!WARNING]
 > セルフホストの場合はうまく動作する保証はありません。自己責任で利用してください。
 
 多機能DiscordBot。IceCube由来のコードがそこそこあります。
-
-## Selene#9222との違い
-`Selene#9222`ではGitHubに公開する前の段階のソースコードを利用しているため、機能に差異がある場合があります。
 
 ## Dependencies
 * Python 3.12系

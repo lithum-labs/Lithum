@@ -44,7 +44,7 @@ with open("./data/commands.yml", "r", encoding="utf-8") as help:
     command = yaml.safe_load(help)
     command_list.cmdlist = command["help"]
 
-    options.botname = "Selene"
+    options.botname = "Lithum"
     options.description = "コマンド一覧を表示します。"
     options.embed_title = "コマンド一覧"
     options.embed_desc = ""
