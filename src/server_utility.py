@@ -8,7 +8,6 @@ import orjson as json
 import yaml
 
 from .lib.dispander import dispand, delete_dispand
-from .lib.vxtwitter import parse, get_twinf
 from .lib.func import func_inter
 from .lib.mongo import MongoDB
 
@@ -97,14 +96,6 @@ class server_tool(commands.GroupCog, name="server-setting"):
         except KeyError:
             pass
         try:
-            if settings["vxtwitter"]["enable"]:
-                urls = await parse(message.content)
-                if urls == []:
-                    return
-                await message.reply(embeds=await get_twinf(urls))
-        except KeyError:
-            pass
-        try:
             if settings["dispander"]["enable"]:
                 await dispand(message)
         except KeyError:
@@ -147,73 +138,6 @@ class server_tool(commands.GroupCog, name="server-setting"):
                     username=settings["customize"]["name"],
                     ephemeral=True,
                 )
-            await interaction.followup.send(
-                embed=embed, avatar_url=settings["customize"]["avatar"], ephemeral=True
-            )
-            return
-        if settings["customize"]["name"] is not None:
-            await interaction.followup.send(
-                embed=embed, avatar_url=settings["customize"]["avatar"], ephemeral=True
-            )
-            return
-        await interaction.followup.send(embed=embed, ephemeral=True)
-
-    @app_commands.command(
-        name="vxtwitter",
-        description="有効の場合、twitter.com/x.comのURLが投稿された場合に自動で展開します",
-    )
-    @app_commands.guild_only()
-    @app_commands.checks.cooldown(cd, 60)
-    @app_commands.checks.has_permissions(manage_messages=True)
-    @app_commands.choices(
-        status=[
-            app_commands.Choice(name="有効化", value="active"),
-            app_commands.Choice(name="無効化", value="deactive"),
-        ],
-        type=[
-            app_commands.Choice(name="API", value="api"),
-            app_commands.Choice(name="URL", value="url"),
-        ],
-    )
-    @app_commands.describe(
-        status="有効/無効を変更できます。",
-        type="APIを利用する場合は、URLを表示しないため、見栄えが多少良くなる可能性があります。",
-    )
-    async def vxtwitter(self, interaction: discord.Interaction, status: str, type: str):
-        await interaction.response.defer()
-        settings = await self.db.selene.find_one({"serverId": interaction.guild.id})
-
-        if status == "active":
-            if settings["vxtwitter"]["enable"]:
-                embed = discord.Embed(title="エラー", description="既に有効です。")
-                enable = True
-            else:
-                enable = True
-                embed = discord.Embed(
-                    title="", description="vxTwitterの自動展開を**有効**に設定しました"
-                )
-        elif status == "deactive":
-            if not settings["vxtwitter"]["enable"]:
-                embed = discord.Embed(title="エラー", description="既に無効です。")
-                enable = False
-            else:
-                enable = False
-                embed = discord.Embed(
-                    title="", description="vxTwitterの自動展開を**無効**に設定しました"
-                )
-        await self.db.selene.update_one(
-            {"serverId": interaction.guild.id},
-            {"$set": {"vxtwitter": {"enable": enable}}},
-        )
-        if settings["customize"]["name"] is not None:
-            if settings["customize"]["avatar"] is not None:
-                await interaction.followup.send(
-                    embed=embed,
-                    avatar_url=settings["customize"]["avatar"],
-                    username=settings["customize"]["name"],
-                    ephemeral=True,
-                )
-                return
             await interaction.followup.send(
                 embed=embed, avatar_url=settings["customize"]["avatar"], ephemeral=True
             )

@@ -31,7 +31,7 @@ class initconf(commands.Cog):
                     "bump": True,
                     "up": True,
                     "auto_publish": {"channels": []},
-                    "vxtwitter": {"enable": True},
+#                     "vxtwitter": {"enable": True},
                     "dispander": {"enable": True},
                     "customize": {"avatar": None, "name": None},
                 }
