@@ -94,13 +94,17 @@ class utils(commands.GroupCog, name="tools"):
     @app_commands.command(name="guild", description="Retrieve guild information.")
     async def guild(self, interaction: discord.Interaction, guild_id: str):
         await interaction.response.defer()
-        menu = ViewMenu(interaction, menu_type=ViewMenu.TypeEmbed)
         acolor = discord.Color.default()
         guild: discord.Guild = await self.bot.fetch_guild(int(guild_id))
         title = getText("{servername} information", lang).replace(
             "{servername}", guild.name
         )
         embed = discord.Embed(title=title, color=acolor)
+        
+        member_count = str(guild.member_count) + getText("Users", lang)
+        if guild.member_count is None:
+            member_count = getText("An error occurred: The value of the number of members is None", lang)
+        """
         discriminator = ""
         owner = getText("Unknown", lang)
         owner_id = ""
@@ -109,55 +113,49 @@ class utils(commands.GroupCog, name="tools"):
             owner_id = " (ID:" + guild.owner.id + ")"
             if guild.owner.discriminator is not None:
                 if not guild.owner.discriminator == "0":
-                    discriminator = "#" + guild.owner.discriminator
+                   discriminator = "#" + guild.owner.discriminator
         embed.add_field(
             name=getText("Guild Owner", lang), value=owner + discriminator + owner_id
         )
+        """
 
         embed.add_field(
-            name=getText("Guild's Member Count", lang), value=str(guild.member_count)
+            name=getText("Guild's Member Count", lang),
+            value=member_count,
+            inline=False,
         )
         embed.add_field(
             name=getText("Guild's VerificationLevel", lang),
             value=getText(self.verification_level[guild.verification_level], lang),
+            inline=False,
         )
         embed.add_field(
             name=getText("Guild's BoostLevel", lang),
             value=getText("level " + str(guild.premium_tier), lang),
+            inline=False,
         )
         embed.add_field(
             name=getText("Guild's BoostCount", lang),
             value=str(guild.premium_subscription_count),
+            inline=False,
         )
 
         times = guild.created_at.timestamp()
         embed.add_field(
-            name=getText("creation date", lang), value=f"<t:{math.floor(times)}:R>"
+            name=getText("creation date", lang),
+            value=f"<t:{math.floor(times)}:R>",
+            inline=False,
         )
 
-        badges = discord.Embed(title=title, color=acolor)
+        guild_icon_url = f"https://ui-avatars.com/api/?name={guild.name.replace(' ', "+").replace('　', '+')}"
         if guild.icon:
-            embed.set_thumbnail(url=guild.icon.url)
+            guild_icon_url = guild.icon.url
+        else:
+            print(guild_icon_url)
 
-        menu.add_page(embed)
-        menu.add_page(badges)
+        embed.set_thumbnail(url=guild_icon_url)
 
-        menu.add_button(
-            ViewButton(
-                style=discord.ButtonStyle.primary,
-                label=getText("Back", lang),
-                custom_id=ViewButton.ID_PREVIOUS_PAGE,
-            )
-        )
-        menu.add_button(
-            ViewButton(
-                style=discord.ButtonStyle.success,
-                label=getText("Next", lang),
-                custom_id=ViewButton.ID_NEXT_PAGE,
-            )
-        )
-
-        await menu.start()
+        await interaction.followup.send(embed=embed)
 
     @app_commands.command(name="user", description="Retrieve user information.")
     async def user(self, interaction: discord.Interaction, user: discord.User):
@@ -173,16 +171,20 @@ class utils(commands.GroupCog, name="tools"):
             "{username}", user.name + discriminator
         )
         embed = discord.Embed(title=title, color=acolor)
-        embed.add_field(name=getText("Bot"), value=user.bot)
+        embed.add_field(name=getText("Bot"), value=user.bot, inline=False)
         times = user.created_at.timestamp()
         embed.add_field(
-            name=getText("creation date"), value=f"<t:{math.floor(times)}:R>"
+            name=getText("creation date"),
+            value=f"<t:{math.floor(times)}:R>",
+            inline=False,
         )
         in_guild = False
         if interaction.guild.get_member(user.id):
             in_guild = True
 
-        embed.add_field(name=getText("Are you on this server?"), value=in_guild)
+        embed.add_field(
+            name=getText("Are you on this server?"), value=in_guild, inline=False
+        )
         badges = discord.Embed(title=title, color=acolor)
         if user.avatar:
             embed.set_thumbnail(url=user.avatar.url)
